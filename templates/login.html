@@ -1,10 +1,36 @@
 {% extends "base_generic.html" %}
+{% load static %}
 {% block title %}<title>Login</title>{% endblock %}
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static '/css/login.css' %}">
+{% endblock %}
 {% block content %}
-    <form action="/login" method="POST">
-        {% csrf_token %}
-        <label>Username <input name="username" type="text"></label>
-        <label>Password <input name="password" type="text"></label>
-        <button type="submit"> Submit</button>
-    </form>
+    <h1 style="color: black">f<span>oo</span>d c<span>o</span>urt l<span>o</span>g<span>in</span> f<span>o</span>rm</h1>
+	<div class="wthree-form">
+			<h2>Fill out the form below to login</h2>
+		<div class="w3l-login form">
+			<form action="/login" method="post" >
+                {% csrf_token %}
+				<div class="form-sub-w3">
+					<input type="text" name="username" placeholder="Username" required=""/>
+				</div>
+				<div class="form-sub-w3">
+					<input type="password" name="password" placeholder="Password" required=""/>
+				</div>
+				<label class="anim">
+					<input type="checkbox" class="checkbox">
+					<span>Remember Me</span>
+				</label>
+				<div class="submit-agileits">
+					<input type="submit" value="Login">
+				</div>
+					<a href="/signup">Sign up</a>
+                    <br>
+                    <a href="/">Home</a>
+			 </form>
+		</div>
+	</div>
+		<div class="footer-agileits">
+			<p>&copy; food court login Form. All Rights Reserved | Design by <a href="http://w3layouts.com/"> W3layouts</a></p>
+		</div>
 {% endblock %}

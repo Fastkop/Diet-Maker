@@ -3,8 +3,9 @@ from django.contrib.auth.models import User
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    age = models.IntegerField(null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, default='')
+    diet = models.ForeignKey('Diet', on_delete=models.CASCADE)
+    age = models.IntegerField(blank=True, null=True)
     weight = models.FloatField(null=True, blank=True)
     height = models.FloatField(null=True, blank=True)
     bmi = models.FloatField(null=True, blank=True)
@@ -13,16 +14,17 @@ class Profile(models.Model):
         ('F', 'Female'),
     )
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    photo = models.ImageField(upload_to='Profile')
+    photo = models.ImageField(upload_to='Profile-Photos', default=None)
 
     def __str__(self):
         return self.user.username
 
 
 class Diet(models.Model):
-    Profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
     name = models.CharField(max_length=20, blank=True)
-    photo = models.ImageField(upload_to='Diet')
+    photo = models.ImageField(upload_to='Diet-photos')
+    description = models.CharField(max_length=40, blank=True)
+
 
     @property
     def meals(self):
@@ -34,7 +36,7 @@ class Diet(models.Model):
 
 class Meal(models.Model):
     name = models.CharField(max_length=20, blank=True)
-    diet = models.ForeignKey(Diet, on_delete=models.CASCADE)
+    profile = models.ForeignKey('Profile', on_delete=models.CASCADE, default=None)
     TYPE = (
         ('b', 'Breakfast'),
         ('l', 'Lunch'),
@@ -43,7 +45,7 @@ class Meal(models.Model):
     )
     type = models.CharField(max_length=8, choices=TYPE)
     foods = models.ManyToManyField('Food')
-    photo = models.ImageField(upload_to='Meal')
+    photo = models.ImageField(upload_to='Meal-photos', default=None)
 
     def __str__(self):
         return self.name
@@ -70,21 +72,23 @@ class Meal(models.Model):
         return total
 
 
+class FoodType(models.Model):
+    name = models.CharField(max_length=20, blank=False)
+
+    def __str__(self):
+        return self.name
+
+
 class Food(models.Model):
     name = models.CharField(max_length=20, blank=True)
-    FOOD_TYPE = (
-        ('m', 'Meat'),
-        ('v', 'Vegetables'),
-        ('ve', 'Vegan'),
-        ('F', 'Fruit'),
-    )
-    type = models.CharField(max_length=10, choices=FOOD_TYPE)
+    diet = models.ManyToManyField('Diet')
     calories = models.FloatField(null=True, blank=True)
     fat = models.FloatField(null=True, blank=True)
     carbs = models.FloatField(null=True, blank=True)
     protein = models.FloatField(null=True, blank=True)
     note = models.CharField(max_length=40, blank=True)
-    photo = models.ImageField(upload_to='Food')
+    photo = models.ImageField(upload_to='Food-photos')
+    type = models.ManyToManyField('FoodType')
 
     def __str__(self):
         return self.name

@@ -20,6 +20,15 @@ from core import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('login', views.login, name='login'),
-    path('signup', views.signup, name='signup'),
+    path('login', views.login_view, name='login_view'),
+    path('logout', views.logout_view, name='logout_view'),
+    path('header', views.header_view, name='header_view'),
+    path('signup', views.signup_view, name='signup_view'),
+    path('profile', views.profile, name='profile'),
+    path('diet', views.diet, name='diet'),
+    path('about', views.aboutus_view, name='aboutus_view'),
+    path('portfolio', views.portfolio, name='portfolio'),
+    path('contact', views.contact, name='contact'),
+    path('update_diet', views.update_diet, name='update_diet'),
+    path('favorite_food', views.favorite_food, name='favorite_food'),
 ]
