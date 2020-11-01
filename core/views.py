@@ -74,6 +74,12 @@ def profile(request):
 def diet(request):
     context = {}
     user = request.user
+    profile = None
+    try:
+        profile = user.profile
+    except:
+        messages.error(request, "You need to finish profile setup first.")
+        return redirect('/profile')
     if request.user.profile.diet:
         meals = user.profile.meal_set.all()
         print(meals)
